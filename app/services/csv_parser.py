@@ -1,11 +1,14 @@
 """CSV file parsing service - converts raw CSV to StockData models."""
 
 import io
+import logging
 from datetime import datetime
 from typing import Optional
 import pandas as pd
 
 from ..models import StockData
+
+logger = logging.getLogger(__name__)
 
 
 # Column name mappings - configurable
@@ -28,6 +31,7 @@ COLUMN_MAP = {
     "perf_1y": "Performance % 1 year",
     "volatility_1m": "Volatility 1 month",
     "high_52w": "High 52 weeks",
+    "high_all_time": "High All Time",
     "sma_50": "Simple Moving Average (50) 1 day",
     "sma_200": "Simple Moving Average (200) 1 day",
     "rel_volume": "Relative Volume 1 day",
@@ -77,6 +81,7 @@ def _row_to_stock(row: pd.Series) -> StockData:
         perf_1y=_safe_float(row.get(COLUMN_MAP["perf_1y"])),
         volatility_1m=_safe_float(row.get(COLUMN_MAP["volatility_1m"])),
         high_52w=_safe_float(row.get(COLUMN_MAP["high_52w"])),
+        high_all_time=_safe_float(row.get(COLUMN_MAP["high_all_time"])),
         sma_50=_safe_float(row.get(COLUMN_MAP["sma_50"])),
         sma_200=_safe_float(row.get(COLUMN_MAP["sma_200"])),
         rel_volume=_safe_float(row.get(COLUMN_MAP["rel_volume"]), 1.0),
@@ -87,8 +92,45 @@ def _row_to_stock(row: pd.Series) -> StockData:
 
 def parse_csv_file(content: bytes | str) -> list[StockData]:
     """Parse CSV content and return list of StockData objects."""
+    logger.info("Parsing CSV content...")
+    
     if isinstance(content, bytes):
         content = content.decode("utf-8")
+        logger.debug("Decoded bytes to UTF-8 string")
     
     df = pd.read_csv(io.StringIO(content))
-    return [_row_to_stock(row) for _, row in df.iterrows()]
+    logger.info(f"CSV has {len(df)} rows and {len(df.columns)} columns")
+    logger.debug(f"Columns found: {list(df.columns)}")
+    
+    # Check for required columns
+    missing_cols = []
+    for key, col in COLUMN_MAP.items():
+        if col not in df.columns:
+            missing_cols.append(col)
+    
+    if missing_cols:
+        logger.warning(f"Missing columns: {missing_cols[:5]}{'...' if len(missing_cols) > 5 else ''}")
+    
+    stocks = []
+    errors = 0
+    for idx, row in df.iterrows():
+        try:
+            stock = _row_to_stock(row)
+            if stock.symbol:  # Skip rows without symbol
+                stocks.append(stock)
+        except Exception as e:
+            errors += 1
+            if errors <= 3:
+                logger.warning(f"Error parsing row {idx}: {e}")
+    
+    if errors > 3:
+        logger.warning(f"... and {errors - 3} more parsing errors")
+    
+    logger.info(f"Successfully parsed {len(stocks)} stocks ({errors} errors)")
+    
+    # Log sample data
+    if stocks:
+        sample = stocks[0]
+        logger.debug(f"Sample stock: {sample.symbol} - {sample.description} - Price: ${sample.price:.2f}")
+    
+    return stocks

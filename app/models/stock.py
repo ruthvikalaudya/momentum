@@ -27,6 +27,7 @@ class StockData:
     perf_1y: float
     volatility_1m: float
     high_52w: float
+    high_all_time: float
     sma_50: float
     sma_200: float
     rel_volume: float

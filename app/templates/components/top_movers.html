@@ -3,11 +3,44 @@
         <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
         </svg>
-        Top Weekly Movers
+        Top Movers
     </h3>
-    <div class="flex flex-wrap gap-2">
-        {% for symbol in analytics.top_movers %}
-        <span class="px-2 py-1 text-xs font-medium bg-success/10 text-success rounded-md">{{ symbol }}</span>
-        {% endfor %}
+    
+    <!-- Weekly Movers -->
+    <div class="mb-3">
+        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Weekly</span>
+        <div class="flex flex-wrap gap-1.5 mt-1">
+            {% for symbol in analytics.top_movers_1w[:5] if analytics.top_movers_1w %}
+            <span class="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded">{{ symbol }}</span>
+            {% else %}
+            {% for symbol in analytics.top_movers[:5] if analytics.top_movers %}
+            <span class="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded">{{ symbol }}</span>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Monthly Movers -->
+    <div class="mb-3">
+        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Monthly</span>
+        <div class="flex flex-wrap gap-1.5 mt-1">
+            {% for symbol in analytics.top_movers_1m[:5] if analytics.top_movers_1m %}
+            <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded">{{ symbol }}</span>
+            {% else %}
+            <span class="text-xs text-slate-400">N/A</span>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- 6-Month Movers -->
+    <div>
+        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">6 Month</span>
+        <div class="flex flex-wrap gap-1.5 mt-1">
+            {% for symbol in analytics.top_movers_6m[:5] if analytics.top_movers_6m %}
+            <span class="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 rounded">{{ symbol }}</span>
+            {% else %}
+            <span class="text-xs text-slate-400">N/A</span>
+            {% endfor %}
+        </div>
     </div>
 </div>

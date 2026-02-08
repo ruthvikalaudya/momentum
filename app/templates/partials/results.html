@@ -2,6 +2,12 @@
 
 <!-- Stats Grid -->
 <section class="mb-6">
+    <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        Ranking Summary
+    </h2>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {{ stat_card("Total Stocks", analytics.total_stocks, "chart", "primary") }}
         {{ stat_card("Top 20 Avg", "%.1f"|format(analytics.top_20_avg_score), "trophy", "warning") }}
@@ -10,19 +16,10 @@
     </div>
 </section>
 
-<!-- Insights Row -->
-<section class="mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {% include "components/trending_industries.html" %}
-        {% include "components/top_movers.html" %}
-        {% include "components/breakout_candidates.html" %}
-    </div>
-</section>
-
-<!-- Filters -->
-<section class="mb-4">
+<!-- Filters (wrapped in form for HTMX includes) -->
+<form id="filters-form" class="mb-4">
     {% include "components/filters.html" %}
-</section>
+</form>
 
 <!-- Stock Table -->
 <section id="stock-table-container">

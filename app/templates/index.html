@@ -1,17 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Upload Section -->
-<section class="mb-8">
-    {% include "components/upload_form.html" %}
-</section>
-
-<!-- Results Section -->
-<div id="results">
-    {% if stocks %}
-        {% include "partials/results.html" %}
-    {% else %}
-        {% include "components/empty_state.html" %}
-    {% endif %}
+{% if stocks %}
+<!-- 3-Panel Layout when stocks are loaded -->
+<div class="flex gap-4">
+    <!-- Left Panel: Market Overview + Upload -->
+    <aside class="w-64 flex-shrink-0">
+        {% include "components/market_overview.html" %}
+        
+        <!-- Upload Section (below market when stocks loaded) -->
+        <div class="mt-4">
+            {% include "components/upload_form.html" %}
+        </div>
+    </aside>
+    
+    <!-- Middle Panel: Main Content -->
+    <main class="flex-1 min-w-0">
+        <div id="results">
+            {% include "partials/results.html" %}
+        </div>
+    </main>
+    
+    <!-- Right Panel: Insights -->
+    <aside class="w-72 flex-shrink-0">
+        {% include "partials/insights_sidebar.html" %}
+    </aside>
 </div>
+{% else %}
+<!-- Centered Layout when no stocks loaded -->
+<div class="flex gap-6">
+    <!-- Left Panel: Market Overview -->
+    <aside class="w-72 flex-shrink-0">
+        {% include "components/market_overview.html" %}
+    </aside>
+    
+    <!-- Center Panel: Upload Form -->
+    <main class="flex-1 flex items-start justify-center pt-12">
+        <div class="w-full max-w-xl">
+            {% include "components/upload_form.html" %}
+            <div id="results" class="mt-6">
+                {% include "components/empty_state.html" %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endif %}
 {% endblock %}
