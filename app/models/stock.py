@@ -20,10 +20,12 @@ class StockData:
     volume_1w: float
     avg_volume_90d: float
     earnings_date: Optional[date]
+    change_1d: float  # Day change %
     perf_1w: float
     perf_1m: float
     perf_3m: float
     perf_6m: float
+    perf_ytd: float  # Year-to-date %
     perf_1y: float
     volatility_1m: float
     high_52w: float

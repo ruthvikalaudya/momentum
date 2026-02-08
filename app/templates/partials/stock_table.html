@@ -1,48 +1,56 @@
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="overflow-x-auto">
+    <!-- Tabs -->
+    <div class="border-b border-slate-200">
+        <nav class="flex -mb-px" aria-label="Tabs">
+            <button id="tab-overview" onclick="switchTab('overview')"
+                    class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-primary text-primary">
+                Overview
+            </button>
+            <button id="tab-performance" onclick="switchTab('performance')"
+                    class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">
+                Performance
+            </button>
+        </nav>
+    </div>
+    
+    <!-- Overview Table -->
+    <div id="table-overview" class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
                     <th class="px-4 py-3 text-left font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "rank", "sort_dir": "{{ 'desc' if sort_by == 'rank' and sort_dir == 'asc' else 'asc' }}"}'
-                        onclick="document.getElementById('sort_by').value='rank'; document.getElementById('sort_dir').value='{{ 'desc' if sort_by == 'rank' and sort_dir == 'asc' else 'asc' }}'">
+                        hx-get="/stocks?sort_by=rank&sort_dir={{ 'desc' if sort_by == 'rank' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Rank {% if sort_by == 'rank' %}{{ '↑' if sort_dir == 'asc' else '↓' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-left font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "symbol", "sort_dir": "{{ 'desc' if sort_by == 'symbol' and sort_dir == 'asc' else 'asc' }}"}'
-                        onclick="document.getElementById('sort_by').value='symbol'; document.getElementById('sort_dir').value='{{ 'desc' if sort_by == 'symbol' and sort_dir == 'asc' else 'asc' }}'">
+                        hx-get="/stocks?sort_by=symbol&sort_dir={{ 'desc' if sort_by == 'symbol' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Symbol {% if sort_by == 'symbol' %}{{ '↑' if sort_dir == 'asc' else '↓' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-left font-semibold text-slate-600 hidden md:table-cell cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "industry", "sort_dir": "{{ 'desc' if sort_by == 'industry' and sort_dir == 'asc' else 'asc' }}"}'
-                        onclick="document.getElementById('sort_by').value='industry'; document.getElementById('sort_dir').value='{{ 'desc' if sort_by == 'industry' and sort_dir == 'asc' else 'asc' }}'">
+                        hx-get="/stocks?sort_by=industry&sort_dir={{ 'desc' if sort_by == 'industry' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Industry {% if sort_by == 'industry' %}{{ '↑' if sort_dir == 'asc' else '↓' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "price", "sort_dir": "{{ 'asc' if sort_by == 'price' and sort_dir == 'desc' else 'desc' }}"}'
-                        onclick="document.getElementById('sort_by').value='price'; document.getElementById('sort_dir').value='{{ 'asc' if sort_by == 'price' and sort_dir == 'desc' else 'desc' }}'">
+                        hx-get="/stocks?sort_by=price&sort_dir={{ 'asc' if sort_by == 'price' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Price {% if sort_by == 'price' %}{{ '↓' if sort_dir == 'desc' else '↑' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-center font-semibold text-slate-600 hidden sm:table-cell cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "market_cap", "sort_dir": "{{ 'asc' if sort_by == 'market_cap' and sort_dir == 'desc' else 'desc' }}"}'
-                        onclick="document.getElementById('sort_by').value='market_cap'; document.getElementById('sort_dir').value='{{ 'asc' if sort_by == 'market_cap' and sort_dir == 'desc' else 'desc' }}'">
+                        hx-get="/stocks?sort_by=market_cap&sort_dir={{ 'asc' if sort_by == 'market_cap' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Market Cap {% if sort_by == 'market_cap' %}{{ '↓' if sort_dir == 'desc' else '↑' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "score", "sort_dir": "{{ 'asc' if sort_by == 'score' and sort_dir == 'desc' else 'desc' }}"}'
-                        onclick="document.getElementById('sort_by').value='score'; document.getElementById('sort_dir').value='{{ 'asc' if sort_by == 'score' and sort_dir == 'desc' else 'desc' }}'">
-                        Total Score {% if sort_by == 'score' %}{{ '↓' if sort_dir == 'desc' else '↑' }}{% endif %}
+                        hx-get="/stocks?sort_by=score&sort_dir={{ 'asc' if sort_by == 'score' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Score {% if sort_by == 'score' %}{{ '↓' if sort_dir == 'desc' else '↑' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
-                        hx-get="/stocks" hx-target="#stock-table-container" hx-include="#filters-form"
-                        hx-vals='{"sort_by": "confidence", "sort_dir": "{{ 'asc' if sort_by == 'confidence' and sort_dir == 'desc' else 'desc' }}"}'
-                        onclick="document.getElementById('sort_by').value='confidence'; document.getElementById('sort_dir').value='{{ 'asc' if sort_by == 'confidence' and sort_dir == 'desc' else 'desc' }}'">
+                        hx-get="/stocks?sort_by=confidence&sort_dir={{ 'asc' if sort_by == 'confidence' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
                         Confidence {% if sort_by == 'confidence' %}{{ '↓' if sort_dir == 'desc' else '↑' }}{% endif %}
                     </th>
                     <th class="px-4 py-3 text-left font-semibold text-slate-600 hidden xl:table-cell">Indexes</th>
@@ -51,7 +59,6 @@
             <tbody class="divide-y divide-slate-100">
                 {% for stock in stocks %}
                 <tr class="hover:bg-slate-50 transition-colors {{ 'bg-amber-50/50' if stock.is_top else '' }}">
-                    <!-- Rank -->
                     <td class="px-4 py-3">
                         {% if stock.rank <= 3 %}
                         <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
@@ -64,8 +71,6 @@
                         <span class="text-slate-500">{{ stock.rank }}</span>
                         {% endif %}
                     </td>
-                    
-                    <!-- Symbol & Name -->
                     <td class="px-4 py-3">
                         <div class="flex flex-col">
                             <a href="https://www.tradingview.com/chart/?symbol={{ stock.data.symbol }}" target="_blank" rel="noopener noreferrer"
@@ -81,21 +86,15 @@
                         <span class="inline-block mt-1 px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 rounded">Earnings Soon</span>
                         {% endif %}
                     </td>
-                    
-                    <!-- Industry (Sector) -->
                     <td class="px-4 py-3 hidden md:table-cell">
                         <div class="flex flex-col">
                             <span class="text-slate-700 text-xs font-medium">{{ stock.data.industry }}</span>
                             <span class="text-slate-400 text-[10px]">({{ stock.data.sector }})</span>
                         </div>
                     </td>
-                    
-                    <!-- Price (actual stock price) -->
                     <td class="px-4 py-3 text-right">
                         <span class="text-slate-900 font-medium">${{ "%.2f"|format(stock.data.price) }}</span>
                     </td>
-                    
-                    <!-- Market Cap with Tag -->
                     <td class="px-4 py-3 text-center hidden sm:table-cell">
                         {% set cap = stock.data.market_cap %}
                         {% set cap_b = cap / 1000000000 %}
@@ -114,13 +113,9 @@
                             {% endif %}
                         </div>
                     </td>
-                    
-                    <!-- Total Score -->
                     <td class="px-4 py-3 text-right">
                         <span class="font-bold {{ 'text-amber-700' if stock.is_top else 'text-slate-900' }}">{{ "%.1f"|format(stock.total_score) }}</span>
                     </td>
-                    
-                    <!-- Confidence Score -->
                     <td class="px-4 py-3 text-right">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
                             {% if stock.confidence >= 80 %}bg-green-100 text-green-800
@@ -129,8 +124,6 @@
                             {{ "%.0f"|format(stock.confidence) }}%
                         </span>
                     </td>
-                    
-                    <!-- Indexes -->
                     <td class="px-4 py-3 hidden xl:table-cell">
                         <div class="flex flex-wrap gap-1 max-w-[200px]">
                             {% for idx in stock.data.indexes.split(', ')[:3] %}
@@ -145,7 +138,202 @@
             </tbody>
         </table>
     </div>
+    
+    <!-- Performance Table -->
+    <div id="table-performance" class="overflow-x-auto hidden">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="px-3 py-3 text-left font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=rank&sort_dir={{ 'desc' if sort_by == 'rank' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Rank
+                    </th>
+                    <th class="px-3 py-3 text-left font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=symbol&sort_dir={{ 'desc' if sort_by == 'symbol' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Symbol
+                    </th>
+                    <th class="px-3 py-3 text-left font-semibold text-slate-600 hidden md:table-cell cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=industry&sort_dir={{ 'desc' if sort_by == 'industry' and sort_dir == 'asc' else 'asc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Industry {% if sort_by == 'industry' %}{{ '↑' if sort_dir == 'asc' else '↓' }}{% endif %}
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=price&sort_dir={{ 'asc' if sort_by == 'price' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Price
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_1d&sort_dir={{ 'asc' if sort_by == 'perf_1d' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        1D
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_1w&sort_dir={{ 'asc' if sort_by == 'perf_1w' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        1W
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_1m&sort_dir={{ 'asc' if sort_by == 'perf_1m' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        1M
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_3m&sort_dir={{ 'asc' if sort_by == 'perf_3m' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        3M
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 hidden lg:table-cell cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_6m&sort_dir={{ 'asc' if sort_by == 'perf_6m' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        6M
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 hidden lg:table-cell cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_ytd&sort_dir={{ 'asc' if sort_by == 'perf_ytd' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        YTD
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 hidden xl:table-cell cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=perf_1y&sort_dir={{ 'asc' if sort_by == 'perf_1y' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        1Y
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=score&sort_dir={{ 'asc' if sort_by == 'score' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Score
+                    </th>
+                    <th class="px-3 py-3 text-right font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+                        hx-get="/stocks?sort_by=confidence&sort_dir={{ 'asc' if sort_by == 'confidence' and sort_dir == 'desc' else 'desc' }}" 
+                        hx-target="#stock-table-container" hx-include="#filters-form">
+                        Conf
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for stock in stocks %}
+                <tr class="hover:bg-slate-50 transition-colors {{ 'bg-amber-50/50' if stock.is_top else '' }}">
+                    <td class="px-3 py-2">
+                        {% if stock.rank <= 3 %}
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold
+                            {% if stock.rank == 1 %}bg-yellow-400 text-yellow-900
+                            {% elif stock.rank == 2 %}bg-slate-300 text-slate-700
+                            {% else %}bg-amber-600 text-white{% endif %}">
+                            {{ stock.rank }}
+                        </span>
+                        {% else %}
+                        <span class="text-slate-500 text-xs">{{ stock.rank }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-3 py-2">
+                        <a href="https://www.tradingview.com/chart/?symbol={{ stock.data.symbol }}" target="_blank" rel="noopener"
+                           class="font-semibold text-sm {{ 'text-amber-700' if stock.is_top else 'text-blue-600' }} hover:underline">
+                            {{ stock.data.symbol }}
+                        </a>
+                    </td>
+                    <td class="px-3 py-2 hidden md:table-cell">
+                        <span class="text-slate-600 text-xs">{{ stock.data.industry[:20] }}{% if stock.data.industry|length > 20 %}...{% endif %}</span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-slate-900 font-medium text-xs">${{ "%.2f"|format(stock.data.price) }}</span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.change_1d >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.change_1d >= 0 else "" }}{{ "%.1f"|format(stock.data.change_1d) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_1w >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_1w >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_1w) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_1m >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_1m >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_1m) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_3m >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_3m >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_3m) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right hidden lg:table-cell">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_6m >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_6m >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_6m) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right hidden lg:table-cell">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_ytd >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_ytd >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_ytd) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right hidden xl:table-cell">
+                        <span class="text-xs font-medium {{ 'text-green-600' if stock.data.perf_1y >= 0 else 'text-red-600' }}">
+                            {{ "+" if stock.data.perf_1y >= 0 else "" }}{{ "%.1f"|format(stock.data.perf_1y) }}%
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="font-bold text-xs {{ 'text-amber-700' if stock.is_top else 'text-slate-900' }}">{{ "%.1f"|format(stock.total_score) }}</span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <span class="text-xs font-medium px-1.5 py-0.5 rounded-full
+                            {% if stock.confidence >= 80 %}bg-green-100 text-green-800
+                            {% elif stock.confidence >= 50 %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ "%.0f"|format(stock.confidence) }}%
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
     <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-sm text-slate-500">
         Showing {{ stocks|length }} stocks
     </div>
 </div>
+
+<script>
+// Store active tab in sessionStorage
+function switchTab(tab) {
+    sessionStorage.setItem('activeTab', tab);
+    applyTab(tab);
+}
+
+function applyTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'text-primary');
+        btn.classList.add('border-transparent', 'text-slate-500');
+    });
+    const activeBtn = document.getElementById('tab-' + tab);
+    if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-slate-500');
+        activeBtn.classList.add('border-primary', 'text-primary');
+    }
+    
+    // Update tables
+    document.getElementById('table-overview').classList.add('hidden');
+    document.getElementById('table-performance').classList.add('hidden');
+    const activeTable = document.getElementById('table-' + tab);
+    if (activeTable) {
+        activeTable.classList.remove('hidden');
+    }
+}
+
+// Restore tab on page load and HTMX swaps
+(function() {
+    const savedTab = sessionStorage.getItem('activeTab') || 'overview';
+    applyTab(savedTab);
+})();
+
+// Listen for HTMX after-swap to restore tab
+document.addEventListener('htmx:afterSwap', function(event) {
+    if (event.target.id === 'stock-table-container') {
+        const savedTab = sessionStorage.getItem('activeTab') || 'overview';
+        applyTab(savedTab);
+    }
+});
+</script>

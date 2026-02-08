@@ -7,7 +7,8 @@
     </h3>
     <div class="flex flex-wrap gap-2">
         {% for symbol in analytics.breakout_candidates %}
-        <span class="px-2 py-1 text-xs font-medium bg-warning/10 text-warning rounded-md">{{ symbol }}</span>
+        <a href="https://www.tradingview.com/chart/?symbol={{ symbol }}" target="_blank" rel="noopener"
+           class="px-2 py-1 text-xs font-medium bg-warning/10 text-warning rounded-md hover:bg-warning/20 transition-colors">{{ symbol }}</a>
         {% endfor %}
     </div>
 </div>

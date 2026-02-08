@@ -9,7 +9,7 @@
     {% if market_data and market_data|length > 0 %}
     <div class="space-y-4">
         {% for etf in market_data %}
-        <a href="https://finance.yahoo.com/quote/{{ etf.symbol }}" target="_blank" rel="noopener"
+        <a href="https://www.tradingview.com/chart/?symbol={{ etf.symbol }}" target="_blank" rel="noopener"
            class="block bg-slate-700/50 rounded-lg p-4 hover:bg-slate-700 transition-colors">
             <!-- Header: Symbol & Name -->
             <div class="flex items-center justify-between mb-3">
@@ -69,7 +69,7 @@
     </div>
     
     <div class="mt-4 pt-4 border-t border-slate-700">
-        <p class="text-[10px] text-slate-500 text-center">Live from Yahoo Finance</p>
+        <p class="text-[10px] text-slate-500 text-center">Data from Yahoo Finance</p>
     </div>
     {% else %}
     <p class="text-slate-400 text-sm text-center py-8">Unable to fetch market data</p>

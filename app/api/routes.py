@@ -41,6 +41,8 @@ async def home(request: Request):
         "stocks": _current_stocks,
         "analytics": _current_analytics,
         "market_data": _current_market_data,
+        "sort_by": "rank",
+        "sort_dir": "asc",
     })
 
 
@@ -92,12 +94,14 @@ async def upload_csv(request: Request, file: UploadFile = File(...)):
         logger.error(f"Error processing CSV: {str(e)}", exc_info=True)
         raise HTTPException(400, f"Error processing CSV: {str(e)}")
     
-    return templates.TemplateResponse("partials/results.html", {
+    return templates.TemplateResponse("partials/main_content.html", {
         "request": request,
         "stocks": _current_stocks,
         "analytics": _current_analytics,
         "market_data": _current_market_data,
         "settings": settings,
+        "sort_by": "rank",
+        "sort_dir": "asc",
     })
 
 
@@ -143,7 +147,13 @@ async def get_stocks(
         "price_mom": lambda s: s.components.price_momentum,
         "vol_mom": lambda s: s.components.volume_momentum,
         "industry": lambda s: s.data.industry.lower(),
+        "perf_1d": lambda s: s.data.change_1d,
         "perf_1w": lambda s: s.data.perf_1w,
+        "perf_1m": lambda s: s.data.perf_1m,
+        "perf_3m": lambda s: s.data.perf_3m,
+        "perf_6m": lambda s: s.data.perf_6m,
+        "perf_ytd": lambda s: s.data.perf_ytd,
+        "perf_1y": lambda s: s.data.perf_1y,
     }
     
     if sort_by in sort_map:
