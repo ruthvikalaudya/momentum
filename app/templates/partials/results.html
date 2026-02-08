@@ -1,0 +1,30 @@
+{% from "components/stat_card.html" import stat_card %}
+
+<!-- Stats Grid -->
+<section class="mb-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {{ stat_card("Total Stocks", analytics.total_stocks, "chart", "primary") }}
+        {{ stat_card("Top 20 Avg", "%.1f"|format(analytics.top_20_avg_score), "trophy", "warning") }}
+        {{ stat_card("Avg Confidence", "%.0f%%"|format(analytics.avg_confidence), "shield", "success") }}
+        {{ stat_card("Earnings Safe", analytics.earnings_safe_count, "trending", "primary") }}
+    </div>
+</section>
+
+<!-- Insights Row -->
+<section class="mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {% include "components/trending_industries.html" %}
+        {% include "components/top_movers.html" %}
+        {% include "components/breakout_candidates.html" %}
+    </div>
+</section>
+
+<!-- Filters -->
+<section class="mb-4">
+    {% include "components/filters.html" %}
+</section>
+
+<!-- Stock Table -->
+<section id="stock-table-container">
+    {% include "partials/stock_table.html" %}
+</section>

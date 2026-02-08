@@ -1,0 +1,28 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <div class="flex flex-col sm:flex-row gap-4 items-end">
+        <div class="flex-1 w-full">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Search</label>
+            <input type="text" id="search" placeholder="Symbol or name..."
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                hx-get="/stocks" hx-trigger="keyup changed delay:300ms" hx-target="#stock-table-container" hx-include="[name='sort_by'],[name='sort_dir'],[name='industry'],[name='top_only']" name="search">
+        </div>
+        <div class="w-full sm:w-auto">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Industry</label>
+            <select name="industry" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                hx-get="/stocks" hx-trigger="change" hx-target="#stock-table-container" hx-include="[name='sort_by'],[name='sort_dir'],[name='search'],[name='top_only']">
+                <option value="">All Industries</option>
+                {% for ind in analytics.trending_industries %}
+                <option value="{{ ind.name }}">{{ ind.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w-full sm:w-auto flex items-center gap-2">
+            <input type="checkbox" id="top_only" name="top_only" value="true"
+                class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                hx-get="/stocks" hx-trigger="change" hx-target="#stock-table-container" hx-include="[name='sort_by'],[name='sort_dir'],[name='search'],[name='industry']">
+            <label for="top_only" class="text-sm text-slate-600 whitespace-nowrap">Top 20 only</label>
+        </div>
+        <input type="hidden" name="sort_by" value="rank">
+        <input type="hidden" name="sort_dir" value="asc">
+    </div>
+</div>

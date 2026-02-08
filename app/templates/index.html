@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Upload Section -->
+<section class="mb-8">
+    {% include "components/upload_form.html" %}
+</section>
+
+<!-- Results Section -->
+<div id="results">
+    {% if stocks %}
+        {% include "partials/results.html" %}
+    {% else %}
+        {% include "components/empty_state.html" %}
+    {% endif %}
+</div>
+{% endblock %}

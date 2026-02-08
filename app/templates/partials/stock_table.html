@@ -1,0 +1,92 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-600">#</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-600">Symbol</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-600 hidden md:table-cell">Industry</th>
+                    <th class="px-4 py-3 text-right font-semibold text-slate-600">Score</th>
+                    <th class="px-4 py-3 text-right font-semibold text-slate-600 hidden sm:table-cell">Price</th>
+                    <th class="px-4 py-3 text-right font-semibold text-slate-600 hidden lg:table-cell">Vol</th>
+                    <th class="px-4 py-3 text-right font-semibold text-slate-600">Conf</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-600 hidden xl:table-cell">Indexes</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for stock in stocks %}
+                <tr class="hover:bg-slate-50 transition-colors {{ 'bg-amber-50/50' if stock.is_top else '' }}">
+                    <!-- Rank -->
+                    <td class="px-4 py-3">
+                        {% if stock.rank <= 3 %}
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
+                            {% if stock.rank == 1 %}bg-yellow-400 text-yellow-900
+                            {% elif stock.rank == 2 %}bg-slate-300 text-slate-700
+                            {% else %}bg-amber-600 text-white{% endif %}">
+                            {{ stock.rank }}
+                        </span>
+                        {% else %}
+                        <span class="text-slate-500">{{ stock.rank }}</span>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- Symbol & Name -->
+                    <td class="px-4 py-3">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-slate-900 {{ 'text-amber-700' if stock.is_top else '' }}">{{ stock.data.symbol }}</span>
+                            <span class="text-xs text-slate-500 truncate max-w-[150px]">{{ stock.data.description }}</span>
+                        </div>
+                        {% if not stock.earnings_safe %}
+                        <span class="inline-block mt-1 px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 rounded">Earnings Soon</span>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- Industry -->
+                    <td class="px-4 py-3 hidden md:table-cell">
+                        <span class="text-slate-600 text-xs">{{ stock.data.industry }}</span>
+                    </td>
+                    
+                    <!-- Score -->
+                    <td class="px-4 py-3 text-right">
+                        <span class="font-bold {{ 'text-amber-700' if stock.is_top else 'text-slate-900' }}">{{ "%.1f"|format(stock.total_score) }}</span>
+                    </td>
+                    
+                    <!-- Price Momentum -->
+                    <td class="px-4 py-3 text-right hidden sm:table-cell">
+                        <span class="text-slate-600">{{ "%.1f"|format(stock.components.price_momentum) }}</span>
+                    </td>
+                    
+                    <!-- Volume Momentum -->
+                    <td class="px-4 py-3 text-right hidden lg:table-cell">
+                        <span class="text-slate-600">{{ "%.1f"|format(stock.components.volume_momentum) }}</span>
+                    </td>
+                    
+                    <!-- Confidence -->
+                    <td class="px-4 py-3 text-right">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                            {% if stock.confidence >= 80 %}bg-green-100 text-green-800
+                            {% elif stock.confidence >= 50 %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ "%.0f"|format(stock.confidence) }}%
+                        </span>
+                    </td>
+                    
+                    <!-- Indexes -->
+                    <td class="px-4 py-3 hidden xl:table-cell">
+                        <div class="flex flex-wrap gap-1 max-w-[200px]">
+                            {% for idx in stock.data.indexes.split(', ')[:3] %}
+                            {% if idx and 'S&P 500' in idx or 'Russell' in idx or 'NASDAQ 100' in idx %}
+                            <span class="px-1.5 py-0.5 text-[10px] font-medium bg-blue-100 text-blue-700 rounded">{{ idx.split(' ')[0] }}{{ idx.split(' ')[1] if idx.split(' ')|length > 1 else '' }}</span>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-sm text-slate-500">
+        Showing {{ stocks|length }} stocks
+    </div>
+</div>

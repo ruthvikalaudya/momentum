@@ -1,0 +1,13 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+        <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+        Top Weekly Movers
+    </h3>
+    <div class="flex flex-wrap gap-2">
+        {% for symbol in analytics.top_movers %}
+        <span class="px-2 py-1 text-xs font-medium bg-success/10 text-success rounded-md">{{ symbol }}</span>
+        {% endfor %}
+    </div>
+</div>
